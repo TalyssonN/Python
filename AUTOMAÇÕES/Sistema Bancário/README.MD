@@ -28,17 +28,6 @@ O projeto foi desenvolvido utilizando **Programação Orientada a Objetos (POO)*
   - `datetime` → registro de data e hora das transações  
   - `os`, `sys` → manipulação de arquivos e terminal  
 
----
-Exemplo de Uso: 
-=== Bem-vindo ao Sistema Bancário ===
-#1 - Criar Conta
-#2 - Depositar
-#3 - Sacar
-#4 - Transferir
-#5 - Consultar Saldo
-#6 - Ver Extrato
-#0 - Sair
-
 🧠 Conceitos Aplicados
 
 Programação Orientada a Objetos (POO)
