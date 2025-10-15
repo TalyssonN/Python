@@ -31,13 +31,13 @@ O projeto foi desenvolvido utilizando **Programação Orientada a Objetos (POO)*
 ---
 Exemplo de Uso: 
 === Bem-vindo ao Sistema Bancário ===
-1 - Criar Conta
-2 - Depositar
-3 - Sacar
-4 - Transferir
-5 - Consultar Saldo
-6 - Ver Extrato
-0 - Sair
+#1 - Criar Conta
+#2 - Depositar
+#3 - Sacar
+#4 - Transferir
+#5 - Consultar Saldo
+#6 - Ver Extrato
+#0 - Sair
 
 🧠 Conceitos Aplicados
 
@@ -64,5 +64,6 @@ Implementação de criptografia para senhas e dados sensíveis
 🧑‍💻 Autor
 
 Talysson Nogueira
-🎓 Estudante de Engenharia de Software | Técnico em Logística
-📧 Contato: talysson39n@gmail.com
+#🎓 Estudante de Engenharia de Software | Técnico em Logística
+#📧 Contato: talysson39n@gmail.com
+# LINKEDIN: www.linkedin.com/in/talysson-nogueira
