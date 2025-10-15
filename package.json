@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "apigratis-sdk-nodejs": "^0.1.6"
+  }
+}
