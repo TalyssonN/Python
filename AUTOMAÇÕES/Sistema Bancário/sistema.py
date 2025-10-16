@@ -1,6 +1,6 @@
 import sqlite3
 from fpdf import FPDF
-
+import extrato
 
 from datetime import datetime
 sqlite3.connect('banco.db')
@@ -19,6 +19,18 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS contas (
                     extrato TEXT NOT NULL
                 )''')
 cursor.connection.commit()
+
+cursor.execute('''CREATE TABLE IF NOT EXISTS movimentacoes (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    tipo TEXT NOT NULL,
+                    valor REAL NOT NULL,
+                    data TEXT NOT NULL,
+                    cpf TEXT NOT NULL,
+                    FOREIGN KEY (cpf) REFERENCES contas(cpf)
+                )''')
+
+cursor.connection.commit()
+
 
 #MENU DA APLICAÇÃO
 print("===== Sistema Bancário =====")
@@ -51,8 +63,7 @@ def criar_conta():
     if len(senha) < 6:
         print("Senha muito curta. Deve ter no mínimo 6 caracteres.")
         return
-    cursor.execute('ALTER TABLE contas DROP COLUMN user_id')
-    cursor.connection.commit()
+    
 
     #LISTA DE DADOS DA CONTA, UNIFICAR FACILITA A INSERÇÃO NA TABELA
     conta = {
@@ -114,7 +125,19 @@ def acessar_conta():
                 novo_saldo = conta[5] + valor
                 cursor.execute('UPDATE contas SET saldo = ? WHERE cpf = ?', (novo_saldo, cpf))
                 cursor.connection.commit()
+
+                cursor.execute('INSERT INTO movimentacoes (cpf, tipo, valor, data) VALUES (?, ?, ?, ?)',
+                               (conta[2], 'Depósito', valor, datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+                
+                cursor.connection.commit()
+
+                # Atualiza a variável local
+                conta = list(conta)
+                conta[5] = novo_saldo
+
                 print(f"Depósito realizado com sucesso. Novo saldo: R$ {novo_saldo:.2f}")
+
+                
         #SAQUE
         elif escolha == '2':
             valor = int(input("Digite o valor do saque: "))
@@ -123,35 +146,34 @@ def acessar_conta():
             elif valor > conta[5]:
                 print("Saldo insuficiente.")
             else:
-                #ATUALIZA O SALDO NA TABELA
-
-                #NÃO ESTÁ ATUALIZANDO, SALDO FICA NEGATIVO RESOLVER =======================================================================================================
-                
+                #ATUALIZA O SALDO NA TABELA               
                 novo_saldo = conta[5] - valor
                 cursor.execute('UPDATE contas SET saldo = ? WHERE cpf = ?', (novo_saldo, cpf))
                 cursor.connection.commit()
+
+                cursor.execute('INSERT INTO movimentacoes (cpf, tipo, valor, data) VALUES (?, ?, ?, ?)',
+                               (conta[2], 'Saque', valor, datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+                
+                cursor.connection.commit()
+
+                # Atualiza a variável local
+                conta = list(conta)
+                conta[5] = novo_saldo
+
                 print(f"Saque realizado com sucesso. Novo saldo: R$ {novo_saldo:.2f}")
         #EXTRATO
         elif escolha == '3':
             print("===== Extrato =====")
-            print(f"Saldo atual: R$ {conta[5]:.2f}")
+            arquivo_pdf = extrato.gerar_extrato_pdf(cpf)
+            print(f"Extrato salvo em: {arquivo_pdf}")
 
-            gerar_pdf = input("Através do extrato é possível verificar todas as movimentações. Deseja gerar um PDF do extrato? (s/n): ")
-
-            if gerar_pdf.lower() == 's':
-                pdf = FPDF()
-                pdf.add_page()
-                # Define a fonte e o tamanho
-                pdf.set_font("Arial", size = 13)
-                #Título do PDF
-                pdf.cell(200, 10, txt = "Extrato Bancário", ln = True, align = 'C')
-                pdf.cell(200, 10, txt = f"Nome: {conta[1]}", ln = True, align = 'L')
-                pdf.cell(200, 10, txt = f"CPF: {conta[2]}", ln = True, align = 'L')
-                pdf.cell(200, 10, txt = f"Saldo: R$ {conta[5]:.2f}", ln = True, align = 'L')
-                pdf.cell(200, 10, txt = "Movimentações:", ln = True, align = 'L')
-                #PDF NÃO ESTÁ ADICIONANDO AS MOVIMENTAÇÕES, APENAS O SALDO ATUAL =======================================================================================================
-                pdf.output("extrato.pdf")
-                print("PDF gerado com sucesso!")
+        elif escolha == '4':
+            print("Saindo da conta...")
+            break
+        else:
+            print("Opção inválida.")
+            continue
+#CHAMADA DAS FUNÇÕES DE ACORDO COM A ESCOLHA DO USUÁRIO
 
 if escolha == '1':
     criar_conta()
