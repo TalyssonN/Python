@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Estacionamento</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f8;
+            color: #333;
+        }
+
+        header {
+            background-color: #1f2937;
+            color: #fff;
+            padding: 15px 30px;
+        }
+
+        header h1 {
+            font-size: 22px;
+        }
+
+        main {
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        input, select, button {
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: #2563eb;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #1d4ed8;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        table th, table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        table th {
+            background-color: #f1f5f9;
+        }
+
+        .status-livre {
+            color: green;
+            font-weight: bold;
+        }
+
+        .status-ocupada {
+            color: red;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #1f2937;
+            color: #fff;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🚗 Sistema Web de Estacionamento</h1>
+</header>
+
+<main>
+    <div class="container">
+
+        <!-- Cadastro de Veículos -->
+        <div class="card">
+            <h2>Cadastro de Veículo</h2>
+            <form id="formVeiculo">
+                <input type="text" id="placa" placeholder="Placa do veículo" required>
+                <input type="text" id="modelo" placeholder="Modelo" required>
+
+                <select id="tipo">
+                    <option value="Carro">Carro</option>
+                    <option value="Moto">Moto</option>
+                    <option value="Caminhonete">Caminhonete</option>
+                </select>
+
+                <button type="submit">Registrar Entrada</button>
+            </form>
+        </div>
+
+        <!-- Lista de Veículos -->
+        <div class="card">
+            <h2>Veículos no Estacionamento</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Placa</th>
+                        <th>Modelo</th>
+                        <th>Tipo</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaVeiculos">
+                    <!-- Dados inseridos via JS -->
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <h2>Cadastrar Usuário</h2>
+
+        <form action="/cadastrar" method="POST">
+            <input type="text" name="nome" placeholder="Nome" required>
+            <br><br>
+
+            <input type="email" name="email" placeholder="Email" required>
+            <br><br>
+
+            <button type="submit">Salvar</button>
+        </form>
+    
+</main>
+
+<footer>
+    <p>Sistema de Estacionamento © 2026</p>
+</footer>
+
+<script>
+    const form = document.getElementById('formVeiculo');
+    const tabela = document.getElementById('tabelaVeiculos');
+
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const placa = document.getElementById('placa').value;
+        const modelo = document.getElementById('modelo').value;
+        const tipo = document.getElementById('tipo').value;
+
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+            <td>${placa}</td>
+            <td>${modelo}</td>
+            <td>${tipo}</td>
+            <td class="status-ocupada">Ocupada</td>
+        `;
+
+        tabela.appendChild(row);
+        form.reset();
+    });
+</script>
+
+</body>
+</html>
