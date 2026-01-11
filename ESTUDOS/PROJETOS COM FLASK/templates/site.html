@@ -127,7 +127,7 @@ footer {
 <div class="card">
 <h2>Cadastro de Veículo</h2>
 
-<form id="formVeiculo">
+<form id="formVeiculo" onsubmit=" enviarDados()">
     <input type="text" id="placa" placeholder="Placa" required>
     <input type="text" id="modelo" placeholder="Modelo" required>
 
@@ -168,71 +168,6 @@ footer {
 <p>Sistema de Estacionamento © 2026</p>
 </footer>
 
-<script>
-let veiculos = [];
-
-const form = document.getElementById('formVeiculo');
-const tabela = document.getElementById('tabelaVeiculos');
-
-form.addEventListener('submit', function (e) {
-    e.preventDefault();
-
-    const placa = placaInput().value;
-    const modelo = modeloInput().value;
-    const tipo = tipoInput().value;
-
-    veiculos.push({
-        id: Date.now(),
-        placa,
-        modelo,
-        tipo,
-        status: 'Ocupada'
-    });
-
-    renderTabela();
-    form.reset();
-});
-
-function placaInput() { return document.getElementById('placa'); }
-function modeloInput() { return document.getElementById('modelo'); }
-function tipoInput() { return document.getElementById('tipo'); }
-
-function renderTabela() {
-    tabela.innerHTML = '';
-
-    veiculos.forEach(v => {
-        const tr = document.createElement('tr');
-
-        tr.innerHTML = `
-            <td>${v.placa}</td>
-            <td>${v.modelo}</td>
-            <td>${v.tipo}</td>
-            <td class="${v.status === 'Livre' ? 'status-livre' : 'status-ocupada'}">
-                ${v.status}
-            </td>
-            <td>
-                <span class="action-btn" onclick="darSaida(${v.id})">Saída</span> |
-                <span class="action-btn" onclick="excluir(${v.id})">Excluir</span>
-            </td>
-        `;
-
-        tabela.appendChild(tr);
-    });
-}
-
-function darSaida(id) {
-    const veiculo = veiculos.find(v => v.id === id);
-    if (veiculo) {
-        veiculo.status = 'Livre';
-        renderTabela();
-    }
-}
-
-function excluir(id) {
-    veiculos = veiculos.filter(v => v.id !== id);
-    renderTabela();
-}
-</script>
 
 </body>
 </html>
